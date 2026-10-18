@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beauty Store Marrakech | متجر الجمال</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-icon">✿</span><span>BEAUTY STORE<small>MARRAKECH</small></span></a>
+  <nav><a href="#products">المنتجات</a><a href="#about">من نحن</a><a class="cart-link" href="{{ url_for('cart') }}">السلة <b>{{ cart_count }}</b></a></nav>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">جمالك يبدأ من هنا</span>
+      <h1>لمسة جمال<br><em>تليق بكِ</em></h1>
+      <p>اكتشفي مجموعتنا المختارة من مستحضرات التجميل، العناية بالبشرة والإكسسوارات الأنيقة.</p>
+      <a class="primary-btn" href="#products">تسوّقي الآن <span>←</span></a>
+      <div class="hero-notes"><span>✦ اختيارات أنيقة</span><span>✦ تجربة تسوّق سهلة</span></div>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=90" alt="مستحضرات تجميل">
+      <div class="floating-note"><span>✧</span><div><strong>جمال في كل تفصيلة</strong><small>اختاري ما يناسبك</small></div></div>
+    </div>
+    <div class="decor decor-one"></div><div class="decor decor-two"></div>
+  </section>
+
+  <section class="benefits">
+    <div><span>♡</span><p><strong>اختيارات مميزة</strong><small>منتجات متنوعة تناسب ذوقك</small></p></div>
+    <div><span>✧</span><p><strong>تسوّق بسهولة</strong><small>أضيفي منتجاتك إلى السلة</small></p></div>
+    <div><span>❀</span><p><strong>اطلبي عبر واتساب</strong><small>أرسلي تفاصيل طلبك مباشرة</small></p></div>
+  </section>
+
+  <section class="products-section" id="products">
+    <div class="section-heading"><div><span class="eyebrow">تصفّحي مجموعتنا</span><h2>منتجات <em>مختارة لكِ</em></h2></div><p>تفاصيل صغيرة، لمسة مختلفة.</p></div>
+    <div class="filters">
+      {% for category in categories %}
+      <a class="{% if selected == category %}active{% endif %}" href="{{ url_for('index', category=category) }}">{{ category }}</a>
+      {% endfor %}
+    </div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}<div class="notice">{% for message in messages %}{{ message }}{% endfor %}</div>{% endif %}
+    {% endwith %}
+    <div class="product-grid">
+      {% for product in products %}
+      <article class="product-card">
+        <div class="product-photo">
+          <img loading="lazy" src="{{ product.image }}" alt="{{ product.name }}">
+          {% if product.tag %}<span class="product-tag">{{ product.tag }}</span>{% endif %}
+          <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post"><button class="quick-add" aria-label="أضف إلى السلة">＋</button></form>
+        </div>
+        <div class="product-info"><small>{{ product.category }}</small><h3>{{ product.name }}</h3><div class="product-bottom"><strong>{{ product.price }} درهم</strong><form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post"><button class="add-btn">أضيفي للسلة</button></form></div></div>
+      </article>
+      {% else %}
+      <p>لا توجد منتجات في هذا القسم حالياً.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="promo" id="about"><div class="promo-symbol">✿</div><div><span class="eyebrow">BEAUTY IS YOURS</span><h2>جمالكِ، بطريقتكِ الخاصة.</h2><p>اكتشفي المنتجات التي تمنح روتينك لمسة مميزة.</p></div><a href="#products" class="light-btn">اكتشفي المجموعة ←</a></section>
+</main>
+<footer><a class="brand footer-brand" href="{{ url_for('index') }}"><span class="brand-icon">✿</span><span>BEAUTY STORE<small>MARRAKECH</small></span></a><p>الجمال في التفاصيل ✨</p><small>© 2026 Beauty Store Marrakech</small></footer>
+</body>
+</html>

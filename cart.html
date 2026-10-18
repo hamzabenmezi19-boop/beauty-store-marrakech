@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>سلة المشتريات | Beauty Store</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<header class="topbar"><a class="brand" href="{{ url_for('index') }}"><span class="brand-icon">✿</span><span>BEAUTY STORE<small>MARRAKECH</small></span></a><nav><a href="{{ url_for('index') }}">متابعة التسوّق</a></nav></header>
+<main class="cart-page"><span class="eyebrow">طلبكِ في مكان واحد</span><h1>سلة <em>المشتريات</em></h1>
+{% with messages = get_flashed_messages() %}{% if messages %}<div class="notice">{{ messages[0] }}</div>{% endif %}{% endwith %}
+{% if items %}
+<div class="cart-layout"><section class="cart-items">
+{% for item in items %}
+<div class="cart-item"><img src="{{ item.product.image }}" alt="{{ item.product.name }}"><div class="cart-item-info"><small>{{ item.product.category }}</small><h3>{{ item.product.name }}</h3><strong>{{ item.product.price }} درهم</strong><div class="quantity"><form action="{{ url_for('change_quantity', product_id=item.product.id) }}" method="post"><input type="hidden" name="action" value="minus"><button aria-label="تقليل الكمية">−</button></form><span>{{ item.qty }}</span><form action="{{ url_for('change_quantity', product_id=item.product.id) }}" method="post"><input type="hidden" name="action" value="plus"><button aria-label="زيادة الكمية">＋</button></form></div></div><strong class="subtotal">{{ item.subtotal }} درهم</strong></div>
+{% endfor %}
+<a class="back-link" href="{{ url_for('index') }}">← متابعة التسوّق</a></section>
+<aside class="checkout-card"><h2>ملخص الطلب</h2><div class="total-row"><span>المجموع</span><strong>{{ total }} درهم</strong></div><p class="checkout-hint">أدخلي معلومات التوصيل، ثم أرسلي الطلب عبر واتساب.</p>
+<form action="{{ url_for('checkout') }}" method="post" class="checkout-form"><label>الاسم الكامل<input name="name" required placeholder="اسمك الكامل"></label><label>رقم الهاتف<input name="phone" required type="tel" placeholder="06xxxxxxxx"></label><label>عنوان التوصيل<textarea name="address" required placeholder="المدينة والحي والعنوان"></textarea></label><button class="primary-btn full-btn" type="submit">إرسال الطلب عبر واتساب ↗</button></form>
+<p class="tiny-note">هذا النموذج لا يقبل الدفع الإلكتروني؛ سيتم إرسال تفاصيل الطلب إلى واتساب بعد ضبط رقم المتجر داخل الكود.</p></aside></div>
+{% else %}
+<div class="empty-cart"><div>♡</div><h2>سلتك فارغة حالياً</h2><p>اختاري المنتجات التي أعجبتكِ ثم عودي إلى هنا.</p><a class="primary-btn" href="{{ url_for('index') }}">تصفّحي المنتجات</a></div>
+{% endif %}
+</main><footer><p>الجمال في التفاصيل ✨</p><small>© 2026 Beauty Store Marrakech</small></footer>
+</body></html>
